@@ -1,0 +1,45 @@
+services:
+  frontend:
+    container_name: kupipodariday-frontend
+    image: ig0rev1ch/kupipodariday-frontend:1.0.0
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    networks:
+      - external
+
+  backend:
+    container_name: kupipodariday-backend
+    image: ig0rev1ch/kupipodariday-backend:1.0.0
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - 4000:3000
+    networks:
+      - internal
+
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    restart: always
+    env_file: .env
+    volumes:
+      - postgres_data:/data/postgres
+    networks:
+      - internal
+
+  adminer:
+    container_name: postgres-preview
+    image: adminer
+    restart: always
+    ports:
+      - 5000:8080
+    networks:
+      - internal
+
+volumes:
+  postgres_data:
+
+networks:
+  internal:
+  external:
